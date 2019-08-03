@@ -1,86 +1,31 @@
-#include <iostream>
+#include<iostream>
+#include<cstdio>
+#include<cmath>
 using namespace std;
-int arr[7];
-int get_ans(void){
-	/////////////////////////////////
-	int ans = arr[6];
-	arr[6] = 0;
-	// proc 6 * 6
-	ans += arr[5];
-	arr[1] = max(0, arr[1] - arr[5]*11);
-	arr[5] = 0;
-	// proc 5 * 5 & 1 * 1
-	ans += arr[4];
-	if(arr[4] <= arr[2] / 5){
-		arr[2] -= arr[4] * 5;
-	}else{
-		arr[1] = max(0, arr[1] - (arr[4] - arr[2] / 5)*20 - (5 - arr[2] % 5)*4);
-		arr[2] = 0;
-	}
-	arr[4] = 0;
-	// proc 4 * 4 & 2 * 2 & 1 * 1
-	ans += arr[3] / 4;
-	arr[3] %= 4;
-	ans += 1;
-	switch(arr[3]){
-		case 3:	{
-			if(arr[2] >= 1){
-				arr[2] -= 1;
-				arr[1] = max(0, arr[1] - 5);
-			}else{
-				arr[1] = max(0, arr[1] - 9);
-			}
-		} break;
-		case 2:	{
-			if(arr[2] >= 3){
-				arr[2] -= 3;
-				arr[1] = max(0, arr[1] - 6);
-			}else{
-				arr[1] = max(0, arr[1] + arr[2]*4 - 18);
-				arr[2] = 0;
-			}
-		} break;
-		case 1:	{
-			if(arr[2] >= 5){
-				arr[2] -= 5;
-				arr[1] = max(0, arr[1] - 7);
-			}else{
-				arr[1] = max(0, arr[1] + arr[2]*4 - 32);
-				arr[2] = 0;
-			}
-		} break;
-		case 0:	ans -= 1;	break;
-	}
-	arr[3] = 0;
-	// proc 3 * 3 & 2 * 2 & 1 * 1 (TODO)
-	ans += arr[2] / 9;
-	arr[2] %= 9;
-	if(arr[2] > 0){
-		ans += 1;
-		arr[1] = max(0, arr[1] - (9 - arr[2])*4);
-	}
-	arr[2] = 0;
-	// proc 2 * 2 & 1 * 1
-	ans += arr[1] / 36;
-	arr[1] %= 36;
-	if(arr[1] > 0){
-		ans += 1;
-	}
-	arr[1] = 0;
-	// proc 1 * 1
-	/////////////////////////////////
-	return ans;
-}
+typedef long long ll;
+int size[101];
+int v[6]={1,4,9,16,25,36};
 int main(){
-	while(true){
-		bool fext = true;
-		for(int i = 1; i <= 6; i ++){
-			cin>>arr[i];
-			if(arr[i] != 0)
-				fext = false;
-		}
-		if(fext)
-			return 0;
-		cout<<get_ans()<<endl;
-	}
+    ios::sync_with_stdio(false);
+    while (1){   
+        int flag=1;
+        int ans=0;
+        for (int i = 0; i < 6; i++){
+                cin >> size[i];
+                if(size[i]!=0)
+                    flag=0;
+            }
+        if(flag)break;
+        ans=size[3]+size[4]+size[5]+(size[2]+3)/4;
+        int n=size[1]-5*size[3];
+        if(size[2]%4==1) n-=5;
+        if(size[2]%4==2) n-=3;
+        if(size[2]%4==3) n-=1;
+        if(n>0) ans+=(n+8)/9;
+        int tol=ans*36-size[1]*v[1]-size[2]*v[2]-size[3]*v[3]-size[4]*v[4]-size[5]*v[5];
+        if((tol)<size[0])
+        ans += (size[0]-tol+35)/36;
+        cout<<ans<<endl;
+    }
+    return 0;
 }
